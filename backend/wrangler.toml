@@ -1,0 +1,23 @@
+name = "medcounsel-v2-2-0-api"
+main = "worker.js"
+compatibility_date = "2024-01-15"
+compatibility_flags = ["nodejs_compat"]
+
+[env.production]
+name = "medcounsel-v2-2-0-api-prod"
+
+[env.staging]
+name = "medcounsel-v2-2-0-api-staging"
+
+[build]
+command = "npm run build"
+
+[[kv_namespaces]]
+binding = "MEDCOUNSEL_DATA"
+id = "your-kv-namespace-id"
+preview_id = "your-preview-kv-namespace-id"
+
+[[r2_buckets]]
+binding = "MEDCOUNSEL_STORAGE"
+bucket_name = "medcounsel-v2-2-0-storage"
+preview_bucket_name = "medcounsel-v2-2-0-storage-preview"
