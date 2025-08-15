@@ -1,0 +1,57 @@
+### Medical College Counseling Platform API Tests
+### Use with REST Client extension
+
+### 1. Get Counselling Types
+GET {{baseUrl}}/api/cutoff/counselling-types
+Content-Type: application/json
+
+### 2. Get Available Years
+GET {{baseUrl}}/api/cutoff/years
+Content-Type: application/json
+
+### 3. Get Rounds for AIQ_PG 2024
+GET {{baseUrl}}/api/cutoff/rounds/AIQ_PG/2024
+Content-Type: application/json
+
+### 4. Get AIQ Data (Quotas and Categories)
+GET {{baseUrl}}/api/cutoff/aiq-data
+Content-Type: application/json
+
+### 5. Get State Data for KEA
+GET {{baseUrl}}/api/cutoff/state-data/KEA
+Content-Type: application/json
+
+### 6. Search Cutoff Data - AIQ Post Graduate
+GET {{baseUrl}}/api/cutoff/search?counselling_type=AIQ_PG&counselling_year=2024&limit=5
+Content-Type: application/json
+
+### 7. Search Cutoff Data - Karnataka State
+GET {{baseUrl}}/api/cutoff/search?counselling_type=KEA&counselling_year=2024&limit=5
+Content-Type: application/json
+
+### 8. Get Statistics for AIQ_PG 2024
+GET {{baseUrl}}/api/cutoff/stats?counselling_type=AIQ_PG&counselling_year=2024
+Content-Type: application/json
+
+### 9. Get Cutoff Trends
+GET {{baseUrl}}/api/cutoff/trends?counselling_type=AIQ_PG&counselling_year=2024
+Content-Type: application/json
+
+### 10. Health Check
+GET {{baseUrl}}/api/health
+Content-Type: application/json
+
+### 11. Test Frontend
+GET {{frontendUrl}}/cutoff-ranks
+Content-Type: text/html
+
+### Environment Variables
+# @baseUrl = http://localhost:3000
+# @frontendUrl = http://localhost:3001
+
+### Usage Instructions:
+# 1. Install REST Client extension
+# 2. Set environment variables above
+# 3. Click "Send Request" above any request
+# 4. Use Ctrl+Alt+R (Cmd+Alt+R on Mac) to send request
+# 5. Use Ctrl+Alt+S (Cmd+Alt+S on Mac) to save response

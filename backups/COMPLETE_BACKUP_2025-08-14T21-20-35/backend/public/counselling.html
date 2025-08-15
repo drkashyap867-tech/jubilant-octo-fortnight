@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Counselling Data - College Database</title>
+    <meta name="description" content="Explore comprehensive counselling information for medical and dental admissions across India.">
+    
+    <!-- Preload critical fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" style="text-decoration: none; color: inherit;">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>CollegeDB</span>
+                </a>
+            </div>
+            <div class="nav-links">
+                <a href="index.html#search" class="nav-link">Search</a>
+                <a href="index.html#stats" class="nav-link">Statistics</a>
+                <a href="counselling.html" class="nav-link active">Counselling</a>
+                <a href="index.html#about" class="nav-link">About</a>
+            </div>
+            <div class="theme-toggle">
+                <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle dark mode" title="Toggle dark mode (Ctrl+Shift+T)">
+                    <i class="fas fa-moon" id="themeIcon"></i>
+                </button>
+            </div>
+            <div class="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <div class="header-content">
+                <h1>Counselling Data</h1>
+                <p>Comprehensive counselling information for medical and dental admissions across India</p>
+                <div class="header-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">AIQ</span>
+                        <span class="stat-label">All India Quota</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">KEA</span>
+                        <span class="stat-label">Karnataka</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">2020-24</span>
+                        <span class="stat-label">Years Covered</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Counselling Data Section -->
+    <section id="counselling" class="counselling-section">
+        <div class="container">
+            <!-- Toggle Section -->
+            <div class="counselling-toggles">
+                <div class="toggle-group">
+                    <h3>STREAM</h3>
+                    <div class="toggle-buttons">
+                        <button class="toggle-btn active" data-stream="ALL">
+                            <i class="fas fa-globe"></i>
+                            <span>ALL</span>
+                        </button>
+                        <button class="toggle-btn" data-stream="MEDICAL">
+                            <i class="fas fa-heartbeat"></i>
+                            <span>MEDICAL</span>
+                        </button>
+                        <button class="toggle-btn" data-stream="DENTAL">
+                            <i class="fas fa-tooth"></i>
+                            <span>DENTAL</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="toggle-group">
+                    <h3>PATH</h3>
+                    <div class="toggle-buttons">
+                        <button class="toggle-btn active" data-path="ALL">
+                            <i class="fas fa-route"></i>
+                            <span>ALL</span>
+                        </button>
+                        <button class="toggle-btn" data-path="UG">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>UG</span>
+                        </button>
+                        <button class="toggle-btn" data-path="PG">
+                            <i class="fas fa-user-graduate"></i>
+                            <span>PG</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters Section -->
+            <div class="counselling-filters">
+                <div class="filters-grid">
+                    <div class="filter-group">
+                        <label for="yearFilter">YEAR</label>
+                        <select id="yearFilter" class="filter-select">
+                            <option value="">All Years</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="stateFilter">STATES</label>
+                        <select id="stateFilter" class="filter-select">
+                            <option value="">All States</option>
+                            <option value="AIQ">AIQ</option>
+                            <option value="KEA">KEA</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="roundFilter">ROUND</label>
+                        <select id="roundFilter" class="filter-select">
+                            <option value="">All Rounds</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="collegeFilter">COLLEGE</label>
+                        <select id="collegeFilter" class="filter-select">
+                            <option value="">All Colleges</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="typeFilter">TYPE</label>
+                        <select id="typeFilter" class="filter-select">
+                            <option value="">All Types</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="courseFilter">COURSE</label>
+                        <select id="courseFilter" class="filter-select">
+                            <option value="">All Courses</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="quotaFilter">QUOTA</label>
+                        <select id="quotaFilter" class="filter-select">
+                            <option value="">All Quotas</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="categoryFilter">CATEGORY</label>
+                        <select id="categoryFilter" class="filter-select">
+                            <option value="">All Categories</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="filter-actions">
+                    <button id="applyFilters" class="btn btn-primary">
+                        <i class="fas fa-filter"></i>
+                        Apply Filters
+                    </button>
+                    <button id="clearFilters" class="btn btn-secondary">
+                        <i class="fas fa-times"></i>
+                        Clear All
+                    </button>
+                    <button id="testCounselling" class="btn btn-outline" onclick="testCounsellingFunctionality()">
+                        <i class="fas fa-vial"></i>
+                        Test Functionality
+                    </button>
+                    <button id="testBasicJS" class="btn btn-outline" onclick="testBasicJS()">
+                        <i class="fas fa-code"></i>
+                        Test Basic JS
+                    </button>
+                </div>
+            </div>
+
+            <!-- Data Display Section -->
+            <div class="counselling-data">
+                <div class="data-header">
+                    <h3>Counselling Results</h3>
+                    <div class="data-stats">
+                        <span id="resultCount">0</span> results found
+                    </div>
+                </div>
+
+                <!-- Waiting Message -->
+                <div id="waitingMessage" class="waiting-message">
+                    <div class="waiting-content">
+                        <i class="fas fa-hand-paper"></i>
+                        <h4>Waiting for Your Selection</h4>
+                        <p>Please select your preferred STREAM and PATH to view counselling data, or use the filters above to explore specific information.</p>
+                        <div class="waiting-tips">
+                            <div class="tip">
+                                <i class="fas fa-lightbulb"></i>
+                                <span>Choose MEDICAL + PG to see postgraduate medical counselling data</span>
+                            </div>
+                            <div class="tip">
+                                <i class="fas fa-lightbulb"></i>
+                                <span>Select DENTAL + UG for undergraduate dental admissions</span>
+                            </div>
+                            <div class="tip">
+                                <i class="fas fa-lightbulb"></i>
+                                <span>Use filters to narrow down by year, state, or college</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results Grid -->
+                <div id="counsellingResults" class="counselling-results-grid" style="display: none;">
+                    <!-- Results will be populated here -->
+                </div>
+
+                <!-- Pagination -->
+                <div id="counsellingPagination" class="pagination" style="display: none;">
+                    <!-- Pagination will be populated here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>College Database</h4>
+                    <p>Your gateway to medical education in India</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <a href="index.html#search">Search</a>
+                    <a href="index.html#stats">Statistics</a>
+                    <a href="counselling.html">Counselling</a>
+                    <a href="index.html#about">About</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p>For support and inquiries</p>
+                    <a href="mailto:support@collegedb.com">support@collegedb.com</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 College Database. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Searching...</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+</body>
+</html>

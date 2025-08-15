@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cutoff Controls Test</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container" style="padding: 2rem; max-width: 1200px; margin: 0 auto;">
+        <h1>🧪 Cutoff Controls Interface Test</h1>
+        
+        <div class="info-section cutoff-section">
+            <h3><i class="fas fa-chart-line"></i> Cutoff Ranks & Quota Information</h3>
+            
+            <!-- Cutoff Data Controls -->
+            <div class="cutoff-controls">
+                                                <div class="control-group">
+                                    <label for="quotaToggle">Quota Type:</label>
+                                    <div class="toggle-buttons">
+                                        <button class="toggle-btn" data-quota="AIQ" onclick="setQuotaFilter('AIQ')">AIQ</button>
+                                        <button class="toggle-btn" data-quota="STATE" onclick="setQuotaFilter('STATE')">STATE</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="control-group">
+                                    <label for="yearSelect">Year:</label>
+                                    <select id="yearSelect" onchange="setYearFilter(this.value)">
+                                        <option value="">Select Year</option>
+                                        <option value="2024">2024</option>
+                                        <option value="2023">2023</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="control-group">
+                                    <label for="roundSelect">Round:</label>
+                                    <select id="roundSelect" onchange="setRoundFilter(this.value)">
+                                        <option value="">Select Round</option>
+                                        <option value="1">Round 1</option>
+                                        <option value="2">Round 2</option>
+                                        <option value="3">Round 3</option>
+                                        <option value="4">Round 4</option>
+                                    </select>
+                                </div>
+                
+                <div class="control-group">
+                    <label>Data Source:</label>
+                    <div class="data-source-indicator">
+                        <span class="source-badge legacy">Legacy DB</span>
+                        <span class="source-badge dedicated">Dedicated DB</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Cutoff Data Display -->
+            <div class="cutoff-data-container">
+                <div class="filter-instructions">
+                    <p><i class="fas fa-info-circle"></i> Please select <strong>Quota Type</strong>, <strong>Year</strong>, and <strong>Round</strong> to view cutoff data.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 2rem; padding: 1rem; background: #f3f4f6; border-radius: 8px;">
+            <h4>Test Instructions:</h4>
+            <ol>
+                <li><strong>Quota Toggle:</strong> Click ALL, AIQ, or STATE buttons</li>
+                <li><strong>Round Selection:</strong> Use the dropdown to select rounds</li>
+                <li><strong>Visual Feedback:</strong> Check button states and data display</li>
+                <li><strong>Responsive:</strong> Resize browser to test mobile view</li>
+            </ol>
+        </div>
+        
+        <div style="margin-top: 2rem;">
+            <a href="/" class="btn btn-primary">← Back to Main Site</a>
+        </div>
+    </div>
+
+    <script>
+        // Test functions for the cutoff controls
+        function setQuotaFilter(quotaType) {
+            console.log('🎯 Setting quota filter:', quotaType);
+            
+            // Update active state of toggle buttons
+            document.querySelectorAll('.toggle-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.quota === quotaType) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Show feedback
+            showNotification(`Quota filter set to: ${quotaType}`, 'success');
+            checkFiltersAndShowData();
+        }
+        
+        function setRoundFilter(roundNumber) {
+            console.log('🎯 Setting round filter:', roundNumber);
+            
+            // Show feedback
+            showNotification(`Round filter set to: ${roundNumber}`, 'success');
+            checkFiltersAndShowData();
+        }
+        
+        function setYearFilter(year) {
+            console.log('🎯 Setting year filter:', year);
+            
+            // Show feedback
+            showNotification(`Year filter set to: ${year}`, 'success');
+            checkFiltersAndShowData();
+        }
+        
+        function checkFiltersAndShowData() {
+            const quotaFilter = document.querySelector('.toggle-btn.active')?.dataset.quota;
+            const yearFilter = document.getElementById('yearSelect').value;
+            const roundFilter = document.getElementById('roundSelect').value;
+            
+            console.log('🔍 Current filters:', { quotaFilter, yearFilter, roundFilter });
+            
+            const container = document.querySelector('.cutoff-data-container');
+            
+            if (quotaFilter && yearFilter && roundFilter) {
+                // All filters selected - show sample data
+                container.innerHTML = `
+                    <div class="cutoff-data-grid">
+                        <div class="category-card">
+                            <div class="category-header">
+                                <h4>UR</h4>
+                                <span class="quota-badge">${quotaFilter}</span>
+                            </div>
+                            <div class="category-details">
+                                <div class="data-source dedicated">
+                                    <span class="source-label">Cutoff Data:</span>
+                                    <div class="cutoff-details">
+                                        <span class="counselling-type">${quotaFilter}</span>
+                                        <span class="year">${yearFilter}</span>
+                                        <span class="round">Round ${roundFilter}</span>
+                                        <span class="cutoff-rank">Rank: 1500</span>
+                                        <span class="percentile">98.5%</span>
+                                        <span class="seats">Seats: 10</span>
+                                        <span class="fees">₹15000</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // Show filter instructions
+                container.innerHTML = `
+                    <div class="filter-instructions">
+                        <p><i class="fas fa-info-circle"></i> Please select <strong>Quota Type</strong>, <strong>Year</strong>, and <strong>Round</strong> to view cutoff data.</p>
+                    </div>
+                `;
+            }
+        }
+        
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                <span>${message}</span>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+        
+        // Add notification styles
+        const style = document.createElement('style');
+        style.textContent = `
+            .notification {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #10b981;
+                color: white;
+                padding: 16px 20px;
+                border-radius: 8px;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                z-index: 3000;
+                animation: slideInRight 0.3s ease;
+            }
+            
+            .notification.error {
+                background: #ef4444;
+            }
+            
+            .notification.info {
+                background: #3b82f6;
+            }
+            
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            .btn {
+                display: inline-block;
+                padding: 12px 24px;
+                background: #6366f1;
+                color: white;
+                text-decoration: none;
+                border-radius: 8px;
+                font-weight: 500;
+                transition: all 0.3s ease;
+            }
+            
+            .btn:hover {
+                background: #4f46e5;
+                transform: translateY(-2px);
+            }
+            
+            .btn-primary {
+                background: #6366f1;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

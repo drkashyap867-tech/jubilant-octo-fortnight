@@ -1,0 +1,704 @@
+const XLSX = require('xlsx');
+const sqlite3 = require('sqlite3').verbose();
+const path = require('path');
+const fs = require('fs');
+
+class SuperIntelligentPatternImporter {
+    constructor() {
+        this.dbPath = path.join(__dirname, 'data', 'cutoff_ranks_enhanced.db');
+        this.db = null;
+        this.importedRecords = 0;
+        this.debugMode = true;
+        this.patternStats = {
+            courses: { recognized: 0, unrecognized: 0, patterns: [] },
+            quotas: { recognized: 0, unrecognized: 0, patterns: [] },
+            categories: { recognized: 0, unrecognized: 0, patterns: [] },
+            ranks: { recognized: 0, unrecognized: 0, patterns: [] }
+        };
+    }
+
+    async connect() {
+        return new Promise((resolve, reject) => {
+            this.db = new sqlite3.Database(this.dbPath, (err) => {
+                if (err) reject(err);
+                else resolve();
+            });
+        });
+    }
+
+    async disconnect() {
+        if (this.db) {
+            return new Promise((resolve) => {
+                this.db.close((err) => {
+                    if (err) console.error('Error closing database:', err);
+                    resolve();
+                });
+            });
+        }
+    }
+
+    // SUPER-INTELLIGENT: Learn patterns from foundation files
+    async learnPatternsFromFoundation() {
+        try {
+            console.log('🧠 Learning patterns from foundation files...');
+            
+            // Load foundation data
+            const foundationData = await this.loadFoundationData();
+            
+            // Extract patterns from courses, quotas, categories
+            this.extractPatternsFromFoundation(foundationData);
+            
+            console.log('✅ Pattern learning completed!');
+            this.displayPatternStats();
+            
+        } catch (error) {
+            console.error('Error learning patterns:', error.message);
+        }
+    }
+
+    async loadFoundationData() {
+        const foundationData = {
+            courses: [],
+            quotas: [],
+            categories: [],
+            states: []
+        };
+
+        try {
+            // Load courses from foundation
+            const coursesPath = path.join(__dirname, 'data', 'foundation', 'courses');
+            if (fs.existsSync(coursesPath)) {
+                const courseFiles = fs.readdirSync(coursesPath).filter(f => f.endsWith('.xlsx'));
+                for (const file of courseFiles) {
+                    const filePath = path.join(coursesPath, file);
+                    const workbook = XLSX.readFile(filePath);
+                    const sheetName = workbook.SheetNames[0];
+                    const sheet = workbook.Sheets[sheetName];
+                    const data = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+                    
+                    // Extract course names from first column
+                    data.forEach(row => {
+                        if (row && row[0]) {
+                            foundationData.courses.push(row[0].toString().trim());
+                        }
+                    });
+                }
+            }
+
+            // Load quotas from foundation
+            const quotasPath = path.join(__dirname, 'data', 'foundation', 'quotas');
+            if (fs.existsSync(quotasPath)) {
+                const quotaFiles = fs.readdirSync(quotasPath).filter(f => f.endsWith('.xlsx'));
+                for (const file of quotaFiles) {
+                    const filePath = path.join(quotasPath, file);
+                    const workbook = XLSX.readFile(filePath);
+                    const sheetName = workbook.SheetNames[0];
+                    const sheet = workbook.Sheets[sheetName];
+                    const data = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+                    
+                    data.forEach(row => {
+                        if (row && row[0]) {
+                            foundationData.quotas.push(row[0].toString().trim());
+                        }
+                    });
+                }
+            }
+
+            // Load categories from foundation
+            const categoriesPath = path.join(__dirname, 'data', 'foundation', 'categories');
+            if (fs.existsSync(categoriesPath)) {
+                const categoryFiles = fs.readdirSync(categoriesPath).filter(f => f.endsWith('.xlsx'));
+                for (const file of categoryFiles) {
+                    const filePath = path.join(categoriesPath, file);
+                    const workbook = XLSX.readFile(filePath);
+                    const sheetName = workbook.SheetNames[0];
+                    const sheet = workbook.Sheets[sheetName];
+                    const data = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+                    
+                    data.forEach(row => {
+                        if (row && row[0]) {
+                            foundationData.categories.push(row[0].toString().trim());
+                        }
+                    });
+                }
+            }
+
+            // Load states from foundation
+            const statesPath = path.join(__dirname, 'data', 'foundation', 'states');
+            if (fs.existsSync(statesPath)) {
+                const stateFiles = fs.readdirSync(statesPath).filter(f => f.endsWith('.xlsx'));
+                for (const file of stateFiles) {
+                    const filePath = path.join(statesPath, file);
+                    const workbook = XLSX.readFile(filePath);
+                    const sheetName = workbook.SheetNames[0];
+                    const sheet = workbook.Sheets[sheetName];
+                    const data = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+                    
+                    data.forEach(row => {
+                        if (row && row[0]) {
+                            foundationData.states.push(row[0].toString().trim());
+                        }
+                    });
+                }
+            }
+
+        } catch (error) {
+            console.error('Error loading foundation data:', error.message);
+        }
+
+        return foundationData;
+    }
+
+    extractPatternsFromFoundation(foundationData) {
+        // Extract unique patterns
+        this.patternStats.courses.patterns = [...new Set(foundationData.courses)];
+        this.patternStats.quotas.patterns = [...new Set(foundationData.quotas)];
+        this.patternStats.categories.patterns = [...new Set(foundationData.categories)];
+        
+        console.log(`📚 Learned ${this.patternStats.courses.patterns.length} course patterns`);
+        console.log(`�� Learned ${this.patternStats.quotas.patterns.length} quota patterns`);
+        console.log(`🏷️  Learned ${this.patternStats.categories.patterns.length} category patterns`);
+    }
+
+    displayPatternStats() {
+        console.log('\n📊 PATTERN LEARNING STATISTICS:');
+        console.log(`  Courses: ${this.patternStats.courses.patterns.length} patterns`);
+        console.log(`  Quotas: ${this.patternStats.quotas.patterns.length} patterns`);
+        console.log(`  Categories: ${this.patternStats.categories.patterns.length} patterns`);
+    }
+
+    // SUPER-INTELLIGENT: Import AIQ data with learned patterns
+    async importAIQFile(filePath) {
+        try {
+            const filename = path.basename(filePath);
+            console.log(`\n🎯 SUPER-INTELLIGENT AIQ IMPORT: ${filename}`);
+            
+            const workbook = XLSX.readFile(filePath);
+            const sheetName = workbook.SheetNames[0];
+            const sheet = workbook.Sheets[sheetName];
+            const rawData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+            
+            console.log(`📋 Found ${rawData.length} rows in ${sheetName}`);
+
+            const fileInfo = this.parseAIIFilename(filename);
+            if (!fileInfo) return;
+
+            console.log(`🎯 Processing: AIQ ${fileInfo.level} ${fileInfo.year} ${fileInfo.round}`);
+
+            // Super-intelligent processing with learned patterns
+            await this.processAIQDataSuperIntelligent(rawData, fileInfo);
+
+        } catch (error) {
+            console.error(`❌ Error importing ${filePath}:`, error.message);
+        }
+    }
+
+    parseAIIFilename(filename) {
+        const aiqMatch = filename.match(/AIQ_(PG|UG)_(\d{4})_R(\d+)/);
+        if (aiqMatch) {
+            return {
+                level: aiqMatch[1],
+                year: parseInt(aiqMatch[2]),
+                round: parseInt(aiqMatch[3]),
+                roundName: `Round ${aiqMatch[3]}`
+            };
+        }
+
+        const specialStrayMatch = filename.match(/AIQ_(PG|UG)_(\d{4})_SPECIAL_STRAY/);
+        if (specialStrayMatch) {
+            return {
+                level: specialStrayMatch[1],
+                year: parseInt(specialStrayMatch[2]),
+                round: 'SPECIAL_STRAY',
+                roundName: 'SPECIAL_STRAY'
+            };
+        }
+
+        const strayMatch = filename.match(/AIQ_(PG|UG)_(\d{4})_STRAY/);
+        if (strayMatch) {
+            return {
+                level: strayMatch[1],
+                year: parseInt(strayMatch[2]),
+                round: 'STRAY',
+                roundName: 'STRAY'
+            };
+        }
+
+        return null;
+    }
+
+    async processAIQDataSuperIntelligent(rawData, fileInfo) {
+        try {
+            if (rawData.length < 2) return;
+
+            const headers = rawData[0];
+            const dataRows = rawData.slice(1);
+            
+            console.log(`  📋 Headers: ${headers.slice(0, 3).join(' | ')}`);
+            console.log(`  📊 Data rows: ${dataRows.length}`);
+
+            // Process each college column with super-intelligent logic
+            for (let colIndex = 0; colIndex < headers.length; colIndex++) {
+                const header = headers[colIndex]?.toString().trim();
+                if (!header || header === '') continue;
+
+                const collegeName = this.extractCollegeName(header);
+                if (!collegeName) continue;
+
+                console.log(`    🏫 Processing college: ${collegeName}`);
+                
+                // Super-intelligent processing
+                await this.processCollegeSuperIntelligent(rawData, colIndex, collegeName, fileInfo);
+            }
+
+        } catch (error) {
+            console.error('Error processing AIQ data:', error.message);
+        }
+    }
+
+    extractCollegeName(header) {
+        const parts = header.split(',');
+        if (parts.length > 0) {
+            return parts[0].trim();
+        }
+        return header;
+    }
+
+    async processCollegeSuperIntelligent(rawData, colIndex, collegeName, fileInfo) {
+        try {
+            const collegeId = await this.findOrCreateCollege(collegeName);
+            if (!collegeId) return;
+
+            // Super-intelligent data flow tracking
+            let currentCourse = null;
+            let currentQuota = null;
+            let currentCategory = null;
+            let currentRank = null;
+            let pendingRecords = [];
+            let unknownCells = [];
+
+            // Process each row with super-intelligent logic
+            for (let rowIndex = 1; rowIndex < rawData.length; rowIndex++) {
+                const row = rawData[rowIndex];
+                if (!row || row.length <= colIndex) continue;
+
+                const cellValue = row[colIndex]?.toString().trim();
+                if (!cellValue || cellValue === '') continue;
+
+                // Super-intelligent pattern recognition
+                const cellType = this.analyzeCellTypeSuperIntelligent(cellValue);
+                
+                switch (cellType) {
+                    case 'COURSE':
+                        // Process pending records
+                        await this.processPendingRecords(pendingRecords, collegeId, fileInfo);
+                        pendingRecords = [];
+                        
+                        currentCourse = cellValue;
+                        currentQuota = null;
+                        currentCategory = null;
+                        currentRank = null;
+                        break;
+                        
+                    case 'QUOTA':
+                        currentQuota = cellValue;
+                        currentCategory = null;
+                        currentRank = null;
+                        break;
+                        
+                    case 'CATEGORY':
+                        currentCategory = cellValue;
+                        currentRank = null;
+                        break;
+                        
+                    case 'RANK':
+                        currentRank = parseInt(cellValue.replace(/\s+/g, ''));
+                        
+                        // Create record if we have all required data
+                        if (currentCourse && currentQuota && currentCategory && currentRank) {
+                            const record = {
+                                collegeId,
+                                courseName: currentCourse,
+                                quota: currentQuota,
+                                category: currentCategory,
+                                rank: currentRank
+                            };
+                            
+                            await this.createAIQCutoffRecord(record, fileInfo);
+                            this.importedRecords++;
+                        } else {
+                            // Store pending record for later processing
+                            pendingRecords.push({
+                                collegeId,
+                                courseName: currentCourse,
+                                quota: currentQuota,
+                                category: currentCategory,
+                                rank: currentRank
+                            });
+                        }
+                        break;
+                        
+                    case 'UNKNOWN':
+                        // Store unknown cells for pattern learning
+                        unknownCells.push(cellValue);
+                        
+                        // Try to infer what this cell contains with learned patterns
+                        if (this.isLikelyCourseWithLearnedPatterns(cellValue)) {
+                            currentCourse = cellValue;
+                        } else if (this.isLikelyQuotaWithLearnedPatterns(cellValue)) {
+                            currentQuota = cellValue;
+                        } else if (this.isLikelyCategoryWithLearnedPatterns(cellValue)) {
+                            currentCategory = cellValue;
+                        }
+                        break;
+                }
+            }
+
+            // Process any remaining pending records
+            await this.processPendingRecords(pendingRecords, collegeId, fileInfo);
+
+            // Learn from unknown cells
+            if (unknownCells.length > 0) {
+                this.learnFromUnknownCells(unknownCells);
+            }
+
+        } catch (error) {
+            console.error(`Error processing college column ${colIndex}:`, error.message);
+        }
+    }
+
+    // SUPER-INTELLIGENT: Enhanced pattern recognition with learned patterns
+    analyzeCellTypeSuperIntelligent(cellValue) {
+        if (this.isAIQCourseSuperIntelligent(cellValue)) return 'COURSE';
+        if (this.isAIQQuotaSuperIntelligent(cellValue)) return 'QUOTA';
+        if (this.isAIQCategorySuperIntelligent(cellValue)) return 'CATEGORY';
+        if (this.isAIQRank(cellValue)) return 'RANK';
+        return 'UNKNOWN';
+    }
+
+    // SUPER-INTELLIGENT: Course recognition with learned patterns
+    isAIQCourseSuperIntelligent(value) {
+        // First check learned patterns from foundation
+        if (this.patternStats.courses.patterns.includes(value)) {
+            this.patternStats.courses.recognized++;
+            return true;
+        }
+
+        // Then check comprehensive regex patterns
+        const coursePatterns = [
+            // Standard medical courses
+            /^M\.D\./i, /^M\.S\./i, /^MBBS/i, /^BDS/i, /^MDS/i, /^DNB/i, /^DIPLOMA/i,
+            
+            // Medical specializations
+            /^GENERAL MEDICINE/i, /^SURGERY/i, /^PEDIATRICS/i, /^OBSTETRICS/i, /^GYNECOLOGY/i,
+            /^PSYCHIATRY/i, /^DERMATOLOGY/i, /^ORTHOPEDICS/i, /^RADIOLOGY/i, /^ANESTHESIA/i,
+            /^BIOCHEMISTRY/i, /^PHYSIOLOGY/i, /^ANATOMY/i, /^MICROBIOLOGY/i, /^PHARMACOLOGY/i,
+            /^FORENSIC MEDICINE/i, /^COMMUNITY MEDICINE/i, /^RESPIRATORY MEDICINE/i,
+            /^TRANSFUSION MEDICINE/i, /^EMERGENCY MEDICINE/i, /^HOSPITAL ADMINISTRATION/i,
+            /^CHILD HEALTH/i, /^PUBLIC HEALTH/i, /^PREVENTIVE MEDICINE/i, /^PATHOLOGY/i,
+            /^LABORATORY MEDICINE/i, /^CLINICAL PHARMACOLOGY/i, /^IMMUNOLOGY/i,
+            
+            // Dental specializations
+            /^CONSERVATIVE DENTISTRY/i, /^ORAL SURGERY/i, /^PROSTHODONTICS/i, /^PAEDODONTICS/i,
+            /^PERIODONTICS/i, /^ORTHODONTICS/i, /^ORAL MEDICINE/i, /^ORAL PATHOLOGY/i,
+            /^PUBLIC HEALTH DENTISTRY/i, /^COMMUNITY DENTISTRY/i,
+            
+            // Additional patterns from our conversation
+            /^MEDICAL/i, /^DENTAL/i, /^CLINICAL/i, /^SPECIALIZATION/i, /^POST GRADUATE/i,
+            /^UNDER GRADUATE/i, /^GRADUATE/i, /^POSTGRADUATE/i, /^UNDERGRADUATE/i,
+            /^MEDICAL COLLEGE/i, /^DENTAL COLLEGE/i, /^HOSPITAL/i, /^INSTITUTE/i,
+            /^COLLEGE/i, /^UNIVERSITY/i, /^ACADEMY/i, /^SCHOOL/i, /^CENTER/i, /^CENTRE/i
+        ];
+        
+        const isMatch = coursePatterns.some(pattern => pattern.test(value));
+        if (isMatch) {
+            this.patternStats.courses.recognized++;
+        } else {
+            this.patternStats.courses.unrecognized++;
+        }
+        
+        return isMatch;
+    }
+
+    // SUPER-INTELLIGENT: Quota recognition with learned patterns
+    isAIQQuotaSuperIntelligent(value) {
+        // First check learned patterns from foundation
+        if (this.patternStats.quotas.patterns.includes(value)) {
+            this.patternStats.quotas.recognized++;
+            return true;
+        }
+
+        // Then check comprehensive regex patterns
+        const quotaPatterns = [
+            /^ALL INDIA$/i, /^ALL INDIA QUOTA$/i, /^CENTRAL QUOTA$/i, /^STATE QUOTA$/i,
+            /^MANAGEMENT\/PAID SEATS QUOTA$/i, /^MANAGEMENT\/ PAID SEATS QUOTA$/i,
+            /^MANAGEMENT QUOTA$/i, /^PAID SEATS QUOTA$/i, /^NRI QUOTA$/i,
+            /^DELHI UNIVERSITY QUOTA$/i, /^IP UNIVERSITY QUOTA$/i, /^CENTRAL INSTITUTE QUOTA$/i,
+            /^GOVERNMENT QUOTA$/i, /^PRIVATE QUOTA$/i, /^OPEN QUOTA$/i,
+            
+            // Additional patterns from our conversation
+            /^GOVERNMENT SEATS$/i, /^PRIVATE SEATS$/i, /^OPEN SEATS$/i, /^RESERVED SEATS$/i,
+            /^UNRESERVED SEATS$/i, /^CENTRAL SEATS$/i, /^STATE SEATS$/i, /^ALL INDIA SEATS$/i,
+            /^MANAGEMENT SEATS$/i, /^PAID SEATS$/i, /^NRI SEATS$/i, /^FOREIGN SEATS$/i,
+            /^INTERNATIONAL SEATS$/i, /^OVERSEAS SEATS$/i, /^QUOTA SEATS$/i, /^SEAT QUOTA$/i
+        ];
+        
+        const isMatch = quotaPatterns.some(pattern => pattern.test(value));
+        if (isMatch) {
+            this.patternStats.quotas.recognized++;
+        } else {
+            this.patternStats.quotas.unrecognized++;
+        }
+        
+        return isMatch;
+    }
+
+    // SUPER-INTELLIGENT: Category recognition with learned patterns
+    isAIQCategorySuperIntelligent(value) {
+        // First check learned patterns from foundation
+        if (this.patternStats.categories.patterns.includes(value)) {
+            this.patternStats.categories.recognized++;
+            return true;
+        }
+
+        // Then check comprehensive regex patterns
+        const categoryPatterns = [
+            /^OPEN$/i, /^OBC$/i, /^SC$/i, /^ST$/i, /^EWS$/i, /^PH$/i, /^PWD$/i,
+            /^OBC PWD$/i, /^SC PWD$/i, /^ST PWD$/i, /^EWS PWD$/i, /^OPEN PWD$/i,
+            /^GENERAL$/i, /^UR$/i, /^RESERVED$/i, /^UNRESERVED$/i, /^CATEGORY 1$/i,
+            /^CATEGORY 2$/i, /^CATEGORY 3$/i, /^CATEGORY 4$/i, /^CATEGORY 5$/i,
+            
+            // Additional patterns from our conversation
+            /^GENERAL CATEGORY$/i, /^RESERVED CATEGORY$/i, /^UNRESERVED CATEGORY$/i,
+            /^OPEN CATEGORY$/i, /^CLOSED CATEGORY$/i, /^SPECIAL CATEGORY$/i,
+            /^PHYSICALLY HANDICAPPED$/i, /^PERSONS WITH DISABILITY$/i, /^DISABLED$/i,
+            /^ECONOMICALLY WEAKER SECTION$/i, /^WEAKER SECTION$/i, /^MINORITY$/i,
+            /^TRIBAL$/i, /^SCHEDULED CASTE$/i, /^SCHEDULED TRIBE$/i, /^OTHER BACKWARD CLASS$/i
+        ];
+        
+        const isMatch = categoryPatterns.some(pattern => pattern.test(value));
+        if (isMatch) {
+            this.patternStats.categories.recognized++;
+        } else {
+            this.patternStats.categories.unrecognized++;
+        }
+        
+        return isMatch;
+    }
+
+    isAIQRank(value) {
+        const cleanValue = value.replace(/\s+/g, '');
+        const isMatch = /^\d+$/.test(cleanValue);
+        
+        if (isMatch) {
+            this.patternStats.ranks.recognized++;
+        } else {
+            this.patternStats.ranks.unrecognized++;
+        }
+        
+        return isMatch;
+    }
+
+    // SUPER-INTELLIGENT: Pattern learning from unknown cells
+    learnFromUnknownCells(unknownCells) {
+        console.log(`  🧠 Learning from ${unknownCells.length} unknown cells...`);
+        
+        unknownCells.forEach(cell => {
+            // Try to categorize unknown cells for future learning
+            if (this.isLikelyCourseWithLearnedPatterns(cell)) {
+                this.patternStats.courses.patterns.push(cell);
+            } else if (this.isLikelyQuotaWithLearnedPatterns(cell)) {
+                this.patternStats.quotas.patterns.push(cell);
+            } else if (this.isLikelyCategoryWithLearnedPatterns(cell)) {
+                this.patternStats.categories.patterns.push(cell);
+            }
+        });
+    }
+
+    // SUPER-INTELLIGENT: Likely pattern matching with learned patterns
+    isLikelyCourseWithLearnedPatterns(value) {
+        return value.includes('MEDICINE') || value.includes('SURGERY') || 
+               value.includes('DENTAL') || value.includes('CLINICAL') ||
+               value.includes('SPECIALIZATION') || value.includes('DIPLOMA') ||
+               value.includes('COURSE') || value.includes('PROGRAM') ||
+               value.includes('STUDY') || value.includes('TRAINING');
+    }
+
+    isLikelyQuotaWithLearnedPatterns(value) {
+        return value.includes('QUOTA') || value.includes('SEATS') || 
+               value.includes('MANAGEMENT') || value.includes('PAID') ||
+               value.includes('GOVERNMENT') || value.includes('PRIVATE') ||
+               value.includes('CENTRAL') || value.includes('STATE') ||
+               value.includes('ALL INDIA') || value.includes('NRI');
+    }
+
+    isLikelyCategoryWithLearnedPatterns(value) {
+        return value.includes('OPEN') || value.includes('OBC') || 
+               value.includes('SC') || value.includes('ST') || 
+               value.includes('EWS') || value.includes('PH') || 
+               value.includes('PWD') || value.includes('GENERAL') ||
+               value.includes('RESERVED') || value.includes('UNRESERVED') ||
+               value.includes('CATEGORY') || value.includes('SECTION');
+    }
+
+    async processPendingRecords(pendingRecords, collegeId, fileInfo) {
+        for (const record of pendingRecords) {
+            if (record.courseName && record.quota && record.category && record.rank) {
+                await this.createAIQCutoffRecord(record, fileInfo);
+                this.importedRecords++;
+            }
+        }
+    }
+
+    async findOrCreateCollege(collegeName) {
+        try {
+            const existing = await this.queryOne(
+                'SELECT id FROM colleges WHERE name = ?',
+                [collegeName]
+            );
+
+            if (existing) return existing.id;
+
+            const result = await this.runQuery(
+                'INSERT INTO colleges (name, location, state, type) VALUES (?, ?, ?, ?)',
+                [collegeName, 'India', 'India', 'Medical College']
+            );
+
+            return result.lastID;
+
+        } catch (error) {
+            console.error('Error with college:', collegeName, error.message);
+            return null;
+        }
+    }
+
+    async findOrCreateCourse(courseName) {
+        try {
+            const existing = await this.queryOne(
+                'SELECT id FROM courses WHERE name = ?',
+                [courseName]
+            );
+
+            if (existing) return existing.id;
+
+            const result = await this.runQuery(
+                'INSERT INTO courses (name, type, duration) VALUES (?, ?, ?)',
+                [courseName, 'medical', 3]
+            );
+
+            return result.lastID;
+
+        } catch (error) {
+            console.error('Error with course:', courseName, error.message);
+            return null;
+        }
+    }
+
+    async createAIQCutoffRecord(record, fileInfo) {
+        try {
+            const courseId = await this.findOrCreateCourse(record.courseName);
+            if (!courseId) return;
+
+            const cleanRank = parseInt(record.rank.toString().replace(/\s+/g, ''));
+
+            await this.runQuery(`
+                INSERT OR REPLACE INTO cutoff_ranks_enhanced 
+                (college_id, course_id, counselling_type, counselling_year, round_number, 
+                 round_name, aiq_quota, aiq_category, state_category, state_quota, 
+                 cutoff_rank, seats_available, fees_amount) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            `, [
+                record.collegeId, courseId, `AIQ_${fileInfo.level}`, fileInfo.year, 
+                typeof fileInfo.round === 'number' ? fileInfo.round : 999,
+                fileInfo.roundName, record.quota, record.category, null, null,
+                cleanRank, 1, 0
+            ]);
+
+        } catch (error) {
+            console.error('Error creating AIQ cutoff record:', error.message);
+        }
+    }
+
+    async queryOne(sql, params = []) {
+        return new Promise((resolve, reject) => {
+            this.db.get(sql, params, (err, row) => {
+                if (err) reject(err);
+                else resolve(row);
+            });
+        });
+    }
+
+    async runQuery(sql, params = []) {
+        return new Promise((resolve, reject) => {
+            this.db.run(sql, params, function (err) {
+                if (err) reject(err);
+                else resolve({ lastID: this.lastID, changes: this.changes });
+            });
+        });
+    }
+
+    // SUPER-INTELLIGENT: Import all AIQ data with learned patterns
+    async importAllAIQData() {
+        try {
+            console.log('🚀 Starting SUPER-INTELLIGENT AIQ Data Import...');
+            
+            await this.connect();
+            
+            // First learn patterns from foundation files
+            await this.learnPatternsFromFoundation();
+            
+            const aiqFiles = this.getAIIExcelFiles();
+            console.log(`📁 Found ${aiqFiles.length} AIQ Excel files to process`);
+
+            for (const file of aiqFiles) {
+                if (fs.existsSync(file)) {
+                    await this.importAIQFile(file);
+                }
+            }
+
+            console.log('\n🎉 SUPER-INTELLIGENT AIQ import completed!');
+            console.log(`📊 Total AIQ records imported: ${this.importedRecords}`);
+            
+            // Display final pattern statistics
+            this.displayFinalPatternStats();
+
+        } catch (error) {
+            console.error('❌ SUPER-INTELLIGENT AIQ import failed:', error.message);
+        } finally {
+            await this.disconnect();
+        }
+    }
+
+    displayFinalPatternStats() {
+        console.log('\n�� FINAL PATTERN RECOGNITION STATISTICS:');
+        console.log(`  Courses: ${this.patternStats.courses.recognized} recognized, ${this.patternStats.courses.unrecognized} unrecognized`);
+        console.log(`  Quotas: ${this.patternStats.quotas.recognized} recognized, ${this.patternStats.quotas.unrecognized} unrecognized`);
+        console.log(`  Categories: ${this.patternStats.categories.recognized} recognized, ${this.patternStats.categories.unrecognized} unrecognized`);
+        console.log(`  Ranks: ${this.patternStats.ranks.recognized} recognized, ${this.patternStats.ranks.unrecognized} unrecognized`);
+        
+        console.log('\n📚 TOTAL PATTERNS LEARNED:');
+        console.log(`  Courses: ${this.patternStats.courses.patterns.length} patterns`);
+        console.log(`  Quotas: ${this.patternStats.quotas.patterns.length} patterns`);
+        console.log(`  Categories: ${this.patternStats.categories.patterns.length} patterns`);
+    }
+
+    getAIIExcelFiles() {
+        const cleanedCutoffsDir = './data/cleaned_cutoffs';
+        const files = [];
+        
+        if (fs.existsSync(cleanedCutoffsDir)) {
+            const items = fs.readdirSync(cleanedCutoffsDir);
+            items.forEach(item => {
+                if (item.startsWith('AIQ_') && (item.endsWith('.xlsx') || item.endsWith('.xls'))) {
+                    files.push(path.join(cleanedCutoffsDir, item));
+                }
+            });
+        }
+        
+        return files.sort();
+    }
+}
+
+// Run the super-intelligent importer
+const importer = new SuperIntelligentPatternImporter();
+importer.importAllAIQData();

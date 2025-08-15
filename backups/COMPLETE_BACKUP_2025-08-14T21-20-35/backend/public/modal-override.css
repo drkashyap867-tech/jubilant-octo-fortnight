@@ -1,0 +1,276 @@
+/* Course Details Modal - Override Styles - HIGHEST PRIORITY */
+body .course-details-modal,
+.course-details-modal {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 10000 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+    transform: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.course-details-modal .modal-overlay {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: rgba(0, 0, 0, 0.6) !important;
+    backdrop-filter: blur(8px) !important;
+}
+
+body .course-details-modal .modal-content,
+.course-details-modal .modal-content {
+    position: relative !important;
+    width: 85% !important;
+    max-width: 700px !important;
+    max-height: 80vh !important;
+    background: white !important;
+    border-radius: 16px !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25) !important;
+    overflow: hidden !important;
+    transform: scale(0.9) !important;
+    transition: transform 0.3s ease !important;
+    z-index: 10001 !important;
+    margin: 0 auto !important;
+    left: auto !important;
+    right: auto !important;
+    top: auto !important;
+    bottom: auto !important;
+}
+
+body .course-details-modal.show .modal-content {
+    transform: scale(1) !important;
+}
+
+
+
+/* Dark theme for modal */
+body[data-theme="dark"] .course-details-modal .modal-content {
+    background: var(--dark-bg-secondary) !important;
+    color: var(--dark-text-primary) !important;
+}
+
+body[data-theme="dark"] .course-details-modal .modal-overlay {
+    background: rgba(0, 0, 0, 0.8) !important;
+}
+
+/* Ensure modal content is scrollable */
+body .course-details-modal .modal-body {
+    max-height: 60vh !important;
+    overflow-y: auto !important;
+    padding: 1.5rem 2rem !important;
+}
+
+body .course-details-modal .modal-header {
+    padding: 1.5rem 2rem !important;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    color: white !important;
+    border-radius: 16px 16px 0 0 !important;
+}
+
+body .course-details-modal .modal-footer {
+    padding: 1.5rem 2rem !important;
+    border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
+    background: #f8f9fa !important;
+    border-radius: 0 0 16px 16px !important;
+}
+
+/* Compact modal content styles */
+body .course-details-modal .course-overview {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+body .course-details-modal .overview-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+body .course-details-modal .stat-item {
+    text-align: center;
+}
+
+body .course-details-modal .stat-number {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+body .course-details-modal .stat-label {
+    font-size: 0.8rem;
+    opacity: 0.9;
+}
+
+body .course-details-modal .college-info-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+body .course-details-modal .info-section {
+    padding: 1.25rem;
+}
+
+body .course-details-modal .info-section h3 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+body .course-details-modal .info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+body .course-details-modal .info-item:last-child {
+    border-bottom: none;
+}
+
+body .course-details-modal .info-item .label {
+    font-weight: 500;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+body .course-details-modal .info-item .value {
+    font-weight: 600;
+    color: #333;
+    text-align: right;
+    max-width: 60%;
+    word-wrap: break-word;
+}
+
+/* Dark theme for compact modal */
+body[data-theme="dark"] .course-details-modal .info-item {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+body[data-theme="dark"] .course-details-modal .info-item .label {
+    color: var(--dark-text-secondary);
+}
+
+body[data-theme="dark"] .course-details-modal .info-item .value {
+    color: var(--dark-text-primary);
+}
+
+body[data-theme="dark"] .course-details-modal .modal-footer {
+    border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Responsive modal sizing */
+@media (max-width: 768px) {
+    body .course-details-modal .modal-content,
+    .course-details-modal .modal-content {
+        width: 95% !important;
+        max-width: 95vw !important;
+        max-height: 85vh !important;
+        margin: 20px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    body .course-details-modal .modal-content,
+    .course-details-modal .modal-content {
+        width: 98% !important;
+        max-width: 98vw !important;
+        max-height: 90vh !important;
+        margin: 10px !important;
+    }
+}
+
+/* ULTIMATE OVERRIDE - Force modal positioning */
+html body .course-details-modal,
+html .course-details-modal {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 10000 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+    transform: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+html body .course-details-modal .modal-content,
+html .course-details-modal .modal-content {
+    position: relative !important;
+    width: 85% !important;
+    max-width: 700px !important;
+    max-height: 80vh !important;
+    background: white !important;
+    border-radius: 16px !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25) !important;
+    overflow: hidden !important;
+    transform: scale(0.9) !important;
+    transition: transform 0.3s ease !important;
+    z-index: 10001 !important;
+    margin: 0 auto !important;
+    left: auto !important;
+    right: auto !important;
+    top: auto !important;
+    bottom: auto !important;
+}
+
+/* NUCLEAR OPTION - Override everything */
+#courseDetailsModal {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 10000 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+    transform: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#courseDetailsModal .modal-content {
+    position: relative !important;
+    width: 85% !important;
+    max-width: 700px !important;
+    max-height: 80vh !important;
+    background: white !important;
+    border-radius: 16px !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25) !important;
+    overflow: hidden !important;
+    transform: scale(0.9) !important;
+    transition: transform 0.3s ease !important;
+    z-index: 10001 !important;
+    margin: 0 auto !important;
+    left: auto !important;
+    right: auto !important;
+    top: auto !important;
+    bottom: auto !important;
+}
+
+#courseDetailsModal .modal-overlay {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: rgba(0, 0, 0, 0.6) !important;
+    backdrop-filter: blur(8px) !important;
+}

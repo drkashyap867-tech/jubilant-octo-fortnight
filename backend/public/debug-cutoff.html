@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Cutoff Data</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container" style="padding: 2rem; max-width: 1200px; margin: 0 auto;">
+        <h1>🐛 Debug Cutoff Data Rendering</h1>
+        
+        <div class="info-section cutoff-section">
+            <h3><i class="fas fa-chart-line"></i> Cutoff Ranks & Quota Information</h3>
+            
+            <!-- Cutoff Data Display -->
+            <div class="cutoff-data-container" id="cutoffDataContainer">
+                <p>Loading cutoff data...</p>
+            </div>
+        </div>
+        
+        <div style="margin-top: 2rem;">
+            <button onclick="loadCutoffData()" class="btn btn-primary">Load Cutoff Data</button>
+            <a href="/" class="btn btn-secondary">← Back to Main Site</a>
+        </div>
+    </div>
+
+    <script>
+        async function loadCutoffData() {
+            try {
+                console.log('🔍 Loading cutoff data...');
+                
+                // Fetch data from the API
+                const response = await fetch('/api/colleges/1/courses/1');
+                const courseInfo = await response.json();
+                
+                console.log('📊 Course info received:', courseInfo);
+                console.log('📊 Category breakdown:', courseInfo.categoryBreakdown);
+                
+                // Create a mock CollegeDatabase object for testing
+                const mockDB = {
+                    currentQuotaFilter: 'ALL',
+                    currentYearFilter: 'ALL',
+                    currentRoundFilter: 'ALL',
+                    
+                    applyCutoffFilters(categoryBreakdown) {
+                        console.log('🔍 Applying filters:', {
+                            quota: this.currentQuotaFilter,
+                            year: this.currentYearFilter,
+                            round: this.currentRoundFilter
+                        });
+                        
+                        let filtered = [...categoryBreakdown];
+                        
+                        // Apply quota filter
+                        if (this.currentQuotaFilter && this.currentQuotaFilter !== 'ALL') {
+                            filtered = filtered.filter(category => {
+                                if (category.new_cutoff_ranks) {
+                                    return category.new_cutoff_ranks.some(record => 
+                                        record.counselling_type === this.currentQuotaFilter
+                                    );
+                                }
+                                return true;
+                            });
+                        }
+                        
+                        // Apply year filter
+                        if (this.currentYearFilter && this.currentYearFilter !== 'ALL') {
+                            filtered = filtered.filter(category => {
+                                if (category.new_cutoff_ranks) {
+                                    return category.new_cutoff_ranks.some(record => 
+                                        record.counselling_year.toString() === this.currentYearFilter
+                                    );
+                                }
+                                return true;
+                            });
+                        }
+                        
+                        // Apply round filter
+                        if (this.currentRoundFilter && this.currentRoundFilter !== 'ALL') {
+                            filtered = filtered.filter(category => {
+                                if (category.new_cutoff_ranks) {
+                                    return category.new_cutoff_ranks.some(record => 
+                                        record.round_number.toString() === this.currentRoundFilter
+                                    );
+                                }
+                                return true;
+                            });
+                        }
+                        
+                        console.log('✅ Filtered data:', filtered);
+                        return filtered;
+                    },
+                    
+                    renderCategoryCard(category) {
+                        console.log('🎯 Rendering category card:', category);
+                        
+                        const newData = category.new_cutoff_ranks ? this.renderNewCutoffData(category.new_cutoff_ranks) : '';
+                        
+                        return `
+                            <div class="category-card">
+                                <div class="category-header">
+                                    <h4>${category.category}</h4>
+                                </div>
+                                <div class="category-details">
+                                    ${newData}
+                                </div>
+                            </div>
+                        `;
+                    },
+                    
+                    renderNewCutoffData(cutoffRanks) {
+                        console.log('🎯 Rendering new cutoff data:', cutoffRanks);
+                        
+                        if (cutoffRanks.length === 0) return '';
+                        
+                        return cutoffRanks.map(record => `
+                            <div class="data-source dedicated">
+                                <span class="source-label">Dedicated DB:</span>
+                                <div class="cutoff-details">
+                                    <span class="counselling-type">${record.counselling_type}</span>
+                                    <span class="year">${record.counselling_year}</span>
+                                    <span class="round">${record.round_name}</span>
+                                    <span class="cutoff-rank">Rank: ${record.cutoff_rank}</span>
+                                    ${record.cutoff_percentile ? `<span class="percentile">${record.cutoff_percentile}%</span>` : ''}
+                                    <span class="seats">Seats: ${record.seats_available}</span>
+                                    ${record.fees_amount ? `<span class="fees">₹${record.fees_amount}</span>` : ''}
+                                </div>
+                            </div>
+                        `).join('');
+                    },
+                    
+                    renderCutoffData(categoryBreakdown) {
+                        console.log('🎯 renderCutoffData called with:', categoryBreakdown);
+                        
+                        if (!categoryBreakdown || categoryBreakdown.length === 0) {
+                            console.log('❌ No category breakdown data');
+                            return '<p class="no-data">No cutoff information available for this course.</p>';
+                        }
+                        
+                        // Apply filters
+                        let filteredData = this.applyCutoffFilters(categoryBreakdown);
+                        console.log('🔍 Filtered data:', filteredData);
+                        
+                        if (filteredData.length === 0) {
+                            console.log('❌ No data matches the selected filters');
+                            return '<p class="no-data">No data matches the selected filters.</p>';
+                        }
+                        
+                        const html = `
+                            <div class="cutoff-data-grid">
+                                ${filteredData.map(category => this.renderCategoryCard(category)).join('')}
+                            </div>
+                        `;
+                        
+                        console.log('✅ Generated HTML:', html);
+                        return html;
+                    }
+                };
+                
+                // Render the cutoff data
+                const container = document.getElementById('cutoffDataContainer');
+                container.innerHTML = mockDB.renderCutoffData(courseInfo.categoryBreakdown);
+                
+                console.log('✅ Cutoff data rendered successfully!');
+                
+            } catch (error) {
+                console.error('❌ Error loading cutoff data:', error);
+                document.getElementById('cutoffDataContainer').innerHTML = 
+                    '<p class="error">Error loading cutoff data: ' + error.message + '</p>';
+            }
+        }
+        
+        // Add button styles
+        const style = document.createElement('style');
+        style.textContent = `
+            .btn {
+                display: inline-block;
+                padding: 12px 24px;
+                margin: 0 8px 8px 0;
+                background: #6366f1;
+                color: white;
+                text-decoration: none;
+                border-radius: 8px;
+                font-weight: 500;
+                transition: all 0.3s ease;
+                border: none;
+                cursor: pointer;
+            }
+            
+            .btn:hover {
+                background: #4f46e5;
+                transform: translateY(-2px);
+            }
+            
+            .btn-secondary {
+                background: #6b7280;
+            }
+            
+            .btn-secondary:hover {
+                background: #4b5563;
+            }
+            
+            .error {
+                color: #ef4444;
+                padding: 1rem;
+                background: #fef2f2;
+                border-radius: 8px;
+                border: 1px solid #fecaca;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

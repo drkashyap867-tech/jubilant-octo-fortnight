@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Modal Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .btn { padding: 10px 20px; margin: 10px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; }
+        .modal.show { display: flex; align-items: center; justify-content: center; }
+        .modal-content { background: white; padding: 20px; border-radius: 10px; max-width: 500px; }
+        .close { float: right; cursor: pointer; font-size: 20px; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Simple Modal Test</h1>
+    
+    <button onclick="showModal()" class="btn">Show Simple Modal</button>
+    <button onclick="showCutoffModal()" class="btn">Show Cutoff Modal</button>
+    
+    <div id="simpleModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Simple Modal</h2>
+            <p>This is a basic modal test.</p>
+        </div>
+    </div>
+    
+    <div id="cutoffModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCutoffModal()">&times;</span>
+            <h2>Cutoff Modal Test</h2>
+            <p>Testing cutoff data display...</p>
+            <div id="cutoffData">Loading...</div>
+        </div>
+    </div>
+
+    <script>
+        function showModal() {
+            document.getElementById('simpleModal').classList.add('show');
+        }
+        
+        function closeModal() {
+            document.getElementById('simpleModal').classList.remove('show');
+        }
+        
+        function showCutoffModal() {
+            document.getElementById('cutoffModal').classList.add('show');
+            loadCutoffData();
+        }
+        
+        function closeCutoffModal() {
+            document.getElementById('cutoffModal').classList.remove('show');
+        }
+        
+        async function loadCutoffData() {
+            try {
+                console.log('🔍 Loading cutoff data...');
+                const response = await fetch('/api/colleges/1/courses/1');
+                const data = await response.json();
+                
+                console.log('📊 Data received:', data);
+                console.log('📊 Category breakdown:', data.categoryBreakdown);
+                
+                const container = document.getElementById('cutoffData');
+                if (data.categoryBreakdown && data.categoryBreakdown.length > 0) {
+                    container.innerHTML = `
+                        <h3>✅ Data Found!</h3>
+                        <p>Categories: ${data.categoryBreakdown.length}</p>
+                        <ul>
+                            ${data.categoryBreakdown.map(cat => `
+                                <li><strong>${cat.category}</strong>: ${cat.new_cutoff_ranks?.length || 0} records</li>
+                            `).join('')}
+                        </ul>
+                    `;
+                } else {
+                    container.innerHTML = '<p>❌ No category breakdown data found</p>';
+                }
+                
+            } catch (error) {
+                console.error('❌ Error:', error);
+                document.getElementById('cutoffData').innerHTML = `<p>❌ Error: ${error.message}</p>`;
+            }
+        }
+        
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('show');
+            }
+        }
+    </script>
+</body>
+</html>

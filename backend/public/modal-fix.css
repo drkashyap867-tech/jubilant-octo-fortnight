@@ -1,0 +1,178 @@
+/* Course Details Modal - Enhanced Styles */
+.course-details-modal .modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+}
+
+.course-details-modal .modal-content {
+    position: relative !important;
+    width: 85% !important;
+    max-width: 700px !important;
+    max-height: 80vh !important;
+    background: white !important;
+    border-radius: 16px !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25) !important;
+    overflow: hidden !important;
+    transform: scale(0.9) !important;
+    transition: transform 0.3s ease !important;
+    z-index: 10001 !important;
+}
+
+.course-details-modal.show .modal-content {
+    transform: scale(1);
+}
+
+.course-details-modal {
+    z-index: 10000 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Dark theme for modal */
+[data-theme="dark"] .course-details-modal .modal-content {
+    background: var(--dark-bg-secondary);
+    color: var(--dark-text-primary);
+}
+
+[data-theme="dark"] .course-details-modal .modal-overlay {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+/* Responsive modal sizing */
+@media (max-width: 768px) {
+    .course-details-modal .modal-content {
+        width: 95%;
+        max-width: 95vw;
+        max-height: 85vh;
+        margin: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .course-details-modal .modal-content {
+        width: 98%;
+        max-width: 98vw;
+        max-height: 90vh;
+        margin: 10px;
+    }
+}
+
+/* Compact modal content */
+.course-details-modal .modal-header {
+    padding: 1.5rem 2rem;
+}
+
+.course-details-modal .modal-header h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.course-details-modal .course-subtitle {
+    font-size: 0.9rem;
+    margin-bottom: 0;
+}
+
+.course-details-modal .modal-body {
+    padding: 1.5rem 2rem;
+    max-height: 60vh;
+}
+
+.course-details-modal .course-overview {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.course-details-modal .overview-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.course-details-modal .stat-item {
+    text-align: center;
+}
+
+.course-details-modal .stat-number {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.course-details-modal .stat-label {
+    font-size: 0.8rem;
+    opacity: 0.9;
+}
+
+.course-details-modal .college-info-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.course-details-modal .info-section {
+    padding: 1.25rem;
+}
+
+.course-details-modal .info-section h3 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+.course-details-modal .info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.course-details-modal .info-item:last-child {
+    border-bottom: none;
+}
+
+.course-details-modal .info-item .label {
+    font-weight: 500;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.course-details-modal .info-item .value {
+    font-weight: 600;
+    color: #333;
+    text-align: right;
+    max-width: 60%;
+    word-wrap: break-word;
+}
+
+.course-details-modal .modal-footer {
+    padding: 1.5rem 2rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+}
+
+/* Dark theme for compact modal */
+[data-theme="dark"] .course-details-modal .info-item {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .course-details-modal .info-item .label {
+    color: var(--dark-text-secondary);
+}
+
+[data-theme="dark"] .course-details-modal .info-item .value {
+    color: var(--dark-text-primary);
+}
+
+[data-theme="dark"] .course-details-modal .modal-footer {
+    border-top-color: rgba(255, 255, 255, 0.1);
+}

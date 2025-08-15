@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Database - Find Your Perfect Institution</title>
+    <meta name="description" content="Discover 2,400+ medical, dental, and DNB institutions across India with comprehensive course and seat information.">
+    
+    <!-- Preload critical fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="modal-override.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>CollegeDB</span>
+            </div>
+            <div class="nav-links">
+                <a href="#search" class="nav-link">Search</a>
+                <a href="#stats" class="nav-link">Statistics</a>
+                <a href="counselling.html" class="nav-link">Counselling</a>
+                <a href="#about" class="nav-link">About</a>
+            </div>
+            <div class="theme-toggle">
+                <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle dark mode" title="Toggle dark mode (Ctrl+Shift+T)">
+                    <i class="fas fa-moon" id="themeIcon"></i>
+                </button>
+            </div>
+            <div class="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="title-line">Discover Your Perfect</span>
+                    <span class="title-line highlight">Medical Institution</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Explore 2,400+ colleges, 16,800+ courses, and 214,000+ seats across India's premier medical, dental, and DNB institutions.
+                </p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number" data-target="2400">0</span>
+                        <span class="stat-label">Colleges</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" data-target="16830">0</span>
+                        <span class="stat-label">Courses</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" data-target="214089">0</span>
+                        <span class="stat-label">Seats</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="floating-cards">
+                    <div class="card medical">
+                        <i class="fas fa-heartbeat"></i>
+                        <span>Medical</span>
+                    </div>
+                    <div class="card dental">
+                        <i class="fas fa-tooth"></i>
+                        <span>Dental</span>
+                    </div>
+                    <div class="card dnb">
+                        <i class="fas fa-hospital"></i>
+                        <span>DNB</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search Section -->
+    <section id="search" class="search-section">
+        <div class="container">
+            <div class="search-header">
+                <h2>Find Your Institution</h2>
+                <p>Search by name, course, state, or specialization</p>
+            </div>
+            
+            <div class="search-box">
+                <div class="search-input-group">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search for colleges, courses, or locations..." />
+                    <button id="searchBtn" class="search-btn">
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <!-- Auto-complete suggestions dropdown -->
+                    <div id="autocompleteDropdown" class="autocomplete-dropdown" style="display: none;">
+                        <div class="autocomplete-header">
+                            <span>Suggestions</span>
+                            <button id="closeAutocomplete" class="close-btn">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div id="autocompleteList" class="autocomplete-list">
+                            <!-- Suggestions will be populated here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="search-filters">
+                    <div class="filter-group">
+                        <label for="streamFilter">STREAM</label>
+                        <select id="streamFilter">
+                            <option value="">All Streams</option>
+                            <option value="medical">Medical</option>
+                            <option value="dental">Dental</option>
+                            <option value="dnb">DNB</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="courseFilter">COURSE</label>
+                        <select id="courseFilter">
+                            <option value="">All Courses</option>
+                            <!-- Courses will be populated by JavaScript based on selected stream -->
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="stateFilter">STATE</label>
+                        <select id="stateFilter">
+                            <option value="">All States</option>
+                            <!-- States will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="sortBy">SORT</label>
+                        <select id="sortBy">
+                            <option value="">Sort by Relevance</option>
+                            <option value="name">Sort by Name</option>
+                            <option value="state">Sort by State</option>
+                            <option value="seats">Sort by Seats</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Search Results Section -->
+            <div class="search-results" id="searchResults" style="display: none;">
+                <div class="results-header">
+                    <h3>Search Results</h3>
+                    <div class="results-count">
+                        Found <span id="resultsCount">0</span> results
+                    </div>
+                </div>
+                
+                <!-- Results Grid -->
+                <div class="results-grid" id="resultsGrid">
+                    <!-- Search results will be populated here -->
+                </div>
+                
+                <!-- Pagination -->
+                <div class="pagination" id="pagination">
+                    <!-- Pagination will be populated here -->
+                </div>
+            </div>
+            
+            <!-- Test Buttons -->
+            <div class="test-buttons" style="text-align: center; margin-top: 2rem;">
+                <button class="btn btn-primary" onclick="testViewDetails()" style="margin: 0 auto;">
+                    <i class="fas fa-vial"></i>
+                    Test View Details
+                </button>
+                <button class="btn btn-outline" onclick="testBasicJS()" style="margin: 0 auto; margin-top: 1rem;">
+                    <i class="fas fa-code"></i>
+                    Test Basic JS
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics Section -->
+    <section id="stats" class="stats-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Database Statistics</h2>
+                <p>Comprehensive overview of our college database</p>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="totalColleges">2,399</h3>
+                        <p>Total Institutions</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="totalCourses">16,830</h3>
+                        <p>Course Offerings</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-chair"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="totalSeats">214,089</h3>
+                        <p>Available Seats</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="totalStates">28</h3>
+                        <p>States Covered</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stats-breakdown">
+                <div class="breakdown-chart">
+                    <h3>Institutions by Type</h3>
+                    <div class="chart-container">
+                        <div class="chart-bar">
+                            <div class="bar-label">Medical</div>
+                            <div class="bar-track">
+                                <div class="bar-fill medical" data-percentage="35"></div>
+                            </div>
+                            <div class="bar-value">848</div>
+                        </div>
+                        <div class="chart-bar">
+                            <div class="bar-label">Dental</div>
+                            <div class="bar-track">
+                                <div class="bar-fill dental" data-percentage="14"></div>
+                            </div>
+                            <div class="bar-value">328</div>
+                        </div>
+                        <div class="chart-bar">
+                            <div class="bar-label">DNB</div>
+                            <div class="bar-track">
+                                <div class="bar-fill dnb" data-percentage="51"></div>
+                            </div>
+                            <div class="bar-value">1,223</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>About College Database</h2>
+                    <p>We've built the most comprehensive database of medical institutions in India, helping students find their perfect educational path. Our platform provides detailed information about courses, seat availability, and institution details.</p>
+                    
+                    <div class="features">
+                        <div class="feature">
+                            <i class="fas fa-search"></i>
+                            <h4>Advanced Search</h4>
+                            <p>Find institutions by name, course, state, or specialization</p>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-database"></i>
+                            <h4>Comprehensive Data</h4>
+                            <p>Access detailed information about courses and seat availability</p>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-chart-line"></i>
+                            <h4>Real-time Statistics</h4>
+                            <p>Get up-to-date information about our database</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>College Database</h4>
+                    <p>Your gateway to medical education in India</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <a href="#search">Search</a>
+                    <a href="#stats">Statistics</a>
+                    <a href="#about">About</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p>For support and inquiries</p>
+                    <a href="mailto:support@collegedb.com">support@collegedb.com</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 College Database. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Searching...</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+</body>
+</html>

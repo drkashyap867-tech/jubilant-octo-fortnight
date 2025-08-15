@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+
+  <!-- PWA Meta Tags -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#3b82f6" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="MedCounsel" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="msapplication-TileColor" content="#3b82f6" />
+  <meta name="msapplication-config" content="/browserconfig.xml" />
+
+  <!-- PWA Icons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png" />
+  <link rel="apple-touch-icon" sizes="144x144" href="/icons/icon-144x144.png" />
+  <link rel="apple-touch-icon" sizes="120x120" href="/icons/icon-120x120.png" />
+  <link rel="apple-touch-icon" sizes="114x114" href="/icons/icon-114x114.png" />
+  <link rel="apple-touch-icon" sizes="76x76" href="/icons/icon-76x76.png" />
+  <link rel="apple-touch-icon" sizes="72x72" href="/icons/icon-72x72.png" />
+  <link rel="apple-touch-icon" sizes="60x60" href="/icons/icon-60x60.png" />
+  <link rel="apple-touch-icon" sizes="57x57" href="/icons/icon-57x57.png" />
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="/manifest.json" />
+
+  <!-- Title and Description -->
+  <title>MedCounsel - Medical College Counseling Platform</title>
+  <meta name="description"
+    content="Comprehensive medical college counseling platform with data analytics, cutoff analysis, and insights. Works offline and optimized for mobile devices." />
+  <meta name="keywords"
+    content="medical college, counseling, cutoff analysis, MBBS, MD, medical education, college search" />
+  <meta name="author" content="MedCounsel Team" />
+
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="MedCounsel - Medical College Counseling Platform" />
+  <meta property="og:description"
+    content="Comprehensive medical college counseling platform with data analytics and insights" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://medcounsel.com" />
+  <meta property="og:image" content="/icons/icon-512x512.png" />
+  <meta property="og:site_name" content="MedCounsel" />
+
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="MedCounsel - Medical College Counseling Platform" />
+  <meta name="twitter:description"
+    content="Comprehensive medical college counseling platform with data analytics and insights" />
+  <meta name="twitter:image" content="/icons/icon-512x512.png" />
+
+  <!-- Mobile Web App Meta Tags -->
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="msapplication-tap-highlight" content="no" />
+
+  <!-- Preconnect and DNS Prefetch for Performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="//fonts.googleapis.com">
+  <link rel="dns-prefetch" href="//fonts.gstatic.com">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Preload Critical Resources -->
+  <!-- Note: Removed preload for main.jsx and index.css to fix Vite warnings -->
+
+  <!-- iOS Splash Screens -->
+  <link rel="apple-touch-startup-image" href="/splash/apple-splash-2048-2732.png"
+    media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+  <link rel="apple-touch-startup-image" href="/splash/apple-splash-1668-2388.png"
+    media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+  <link rel="apple-touch-startup-image" href="/splash/apple-splash-1536-2048.png"
+    media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+  <link rel="apple-touch-startup-image" href="/splash/apple-splash-1125-2436.png"
+    media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
+  <link rel="apple-touch-startup-image" href="/splash/apple-splash-1242-2688.png"
+    media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" />
+  <link rel="apple-touch-startup-image" href="/splash/apple-splash-750-1334.png"
+    media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+  <link rel="apple-touch-startup-image" href="/splash/apple-splash-640-1136.png"
+    media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <!-- PWA Installation Prompt -->
+  <div id="pwa-install-prompt" style="display: none;" class="pwa-prompt">
+    <div class="pwa-prompt-content">
+      <h3>Install MedCounsel</h3>
+      <p>Add to your home screen for quick access and offline use!</p>
+      <button id="pwa-install-btn">Install</button>
+      <button id="pwa-dismiss-btn">Not Now</button>
+    </div>
+  </div>
+
+  <!-- PWA Update Notification -->
+  <div id="pwa-update-notification" style="display: none;" class="pwa-update">
+    <div class="pwa-update-content">
+      <p>New version available! 🚀</p>
+      <button id="pwa-update-btn">Update Now</button>
+    </div>
+  </div>
+
+  <!-- Main App Script -->
+  <script type="module" src="/src/main.jsx"></script>
+
+  <!-- PWA Service Worker Registration -->
+  <script>
+    // PWA Service Worker Registration
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((registration) => {
+            console.log('✅ Service Worker registered successfully:', registration.scope);
+
+            // Check for updates
+            registration.addEventListener('updatefound', () => {
+              const newWorker = registration.installing;
+              newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  showUpdateNotification();
+                }
+              });
+            });
+          })
+          .catch((error) => {
+            console.error('❌ Service Worker registration failed:', error);
+          });
+      });
+    }
+
+    // PWA Installation Prompt
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      showInstallPrompt();
+    });
+
+    function showInstallPrompt() {
+      const prompt = document.getElementById('pwa-install-prompt');
+      if (prompt) {
+        prompt.style.display = 'block';
+
+        document.getElementById('pwa-install-btn').addEventListener('click', () => {
+          deferredPrompt.prompt();
+          deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+              console.log('✅ User accepted PWA installation');
+            }
+            deferredPrompt = null;
+            prompt.style.display = 'none';
+          });
+        });
+
+        document.getElementById('pwa-dismiss-btn').addEventListener('click', () => {
+          prompt.style.display = 'none';
+        });
+      }
+    }
+
+    function showUpdateNotification() {
+      const notification = document.getElementById('pwa-update-notification');
+      if (notification) {
+        notification.style.display = 'block';
+
+        document.getElementById('pwa-update-btn').addEventListener('click', () => {
+          window.location.reload();
+        });
+      }
+    }
+
+    // Offline/Online Status
+    window.addEventListener('online', () => {
+      document.body.classList.remove('offline');
+      console.log('🌐 Back online!');
+    });
+
+    window.addEventListener('offline', () => {
+      document.body.classList.add('offline');
+      console.log('📱 Gone offline');
+    });
+  </script>
+</body>
+
+</html>

@@ -6,6 +6,9 @@ compatibility_flags = ["nodejs_compat"]
 command = "npm run build"
 output_dir = "dist"
 
+# Pages-specific configuration
+pages_build_output_dir = "dist"
+
 [env.production]
 name = "medcounsel-v2-2-0-frontend-prod"
 

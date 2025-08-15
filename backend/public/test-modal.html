@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Modal</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container" style="padding: 2rem; max-width: 1200px; margin: 0 auto;">
+        <h1>🧪 Test Modal Display</h1>
+        
+        <button onclick="testModal()" class="btn btn-primary">Test Modal</button>
+        <a href="/" class="btn btn-secondary">← Back to Main Site</a>
+    </div>
+
+    <script>
+        function testModal() {
+            console.log('🧪 Testing modal...');
+            
+            // Create a simple modal
+            const modalHTML = `
+                <div class="course-details-modal" id="testModal">
+                    <div class="modal-overlay" onclick="closeTestModal()"></div>
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2>Test Course</h2>
+                            <p class="course-subtitle">Test College</p>
+                            <button class="modal-close" onclick="closeTestModal()">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="modal-body">
+                            <div class="info-section cutoff-section">
+                                <h3><i class="fas fa-chart-line"></i> Cutoff Ranks & Quota Information</h3>
+                                
+                                <!-- Cutoff Data Controls -->
+                                <div class="cutoff-controls">
+                                    <div class="control-group">
+                                        <label for="quotaToggle">Quota Type:</label>
+                                        <div class="toggle-buttons">
+                                            <button class="toggle-btn active" data-quota="ALL" data-action="setQuotaFilter" data-value="ALL">ALL</button>
+                                            <button class="toggle-btn" data-quota="AIQ" data-action="setQuotaFilter" data-value="AIQ">AIQ</button>
+                                            <button class="toggle-btn" data-quota="STATE" data-action="setQuotaFilter" data-value="STATE">STATE</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="control-group">
+                                        <label for="yearSelect">Year:</label>
+                                        <select id="yearSelect" data-action="setYearFilter">
+                                            <option value="ALL">All Years</option>
+                                            <option value="2024">2024</option>
+                                            <option value="2023">2023</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="control-group">
+                                        <label for="roundSelect">Round:</label>
+                                        <select id="roundSelect" data-action="setRoundFilter">
+                                            <option value="ALL">All Rounds</option>
+                                            <option value="1">Round 1</option>
+                                            <option value="2">Round 2</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <!-- Cutoff Data Display -->
+                                <div class="cutoff-data-container">
+                                    <div class="cutoff-data-grid">
+                                        <div class="category-card">
+                                            <div class="category-header">
+                                                <h4>UR</h4>
+                                            </div>
+                                            <div class="category-details">
+                                                <div class="data-source dedicated">
+                                                    <span class="source-label">Dedicated DB:</span>
+                                                    <div class="cutoff-details">
+                                                        <span class="counselling-type">AIQ</span>
+                                                        <span class="year">2024</span>
+                                                        <span class="round">Round 1</span>
+                                                        <span class="cutoff-rank">Rank: 1500</span>
+                                                        <span class="percentile">98.5%</span>
+                                                        <span class="seats">Seats: 10</span>
+                                                        <span class="fees">₹15000</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Add modal to page
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+            
+            // Apply modal positioning
+            const modal = document.getElementById('testModal');
+            const modalContent = modal.querySelector('.modal-content');
+            
+            Object.assign(modal.style, {
+                position: 'fixed',
+                top: '0',
+                left: '0',
+                width: '100vw',
+                height: '100vh',
+                zIndex: '10000',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+            });
+            
+            Object.assign(modalContent.style, {
+                width: '85%',
+                maxWidth: '700px',
+                maxHeight: '80vh',
+                margin: '0 auto'
+            });
+            
+            console.log('✅ Test modal created successfully!');
+        }
+        
+        function closeTestModal() {
+            const modal = document.getElementById('testModal');
+            if (modal) {
+                modal.remove();
+                console.log('✅ Test modal closed');
+            }
+        }
+        
+        // Add button styles
+        const style = document.createElement('style');
+        style.textContent = `
+            .btn {
+                display: inline-block;
+                padding: 12px 24px;
+                margin: 0 8px 8px 0;
+                background: #6366f1;
+                color: white;
+                text-decoration: none;
+                border-radius: 8px;
+                font-weight: 500;
+                transition: all 0.3s ease;
+                border: none;
+                cursor: pointer;
+            }
+            
+            .btn:hover {
+                background: #4f46e5;
+                transform: translateY(-2px);
+            }
+            
+            .btn-secondary {
+                background: #6b7280;
+            }
+            
+            .btn-secondary:hover {
+                background: #4b5563;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
